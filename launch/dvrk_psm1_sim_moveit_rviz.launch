@@ -11,6 +11,18 @@
         type="dvrk_console_json"
         args="-j $(arg config) -c crtk_alpha"/>
 
+  <rosparam file="$(find dvrk_psm1_moveit_config)/config/controllers.yaml" command="load"/>
+  
+  <include file="$(find dvrk_psm1_moveit_config)/launch/planning_context.launch">
+    <arg name="load_robot_description" value="true"/>
+  </include>
+  
+  <include file="$(find dvrk_psm1_moveit_config)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+  </include>
+
   <group ns="/dvrk/$(arg arm)">
 
     <arg name="gui" default="false"/>
@@ -28,10 +40,21 @@
 
     <node name="joint_state_publisher"
 	  pkg="joint_state_publisher"
-	  type="joint_state_publisher"/>
+	  type="joint_state_publisher"
+	  output="screen"/>
+
+    <node name="ros_control_controller_spawner"
+	  pkg="controller_manager"
+	  type="spawner"
+	  respawn="false"
+	  output="screen"
+	  args="pos_based_pos_traj_controller" />
+
     <node name="robot_state_publisher"
 	  pkg="robot_state_publisher"
-	  type="state_publisher"/>
+	  type="robot_state_publisher"
+	  output="screen"/>
+
     <node name="dvrk_crtk_hw"
 	  pkg="ros_control_crtk_ros_hw"
 	  type="crtk_ros_hw_controller"
