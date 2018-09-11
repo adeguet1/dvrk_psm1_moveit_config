@@ -11,18 +11,6 @@
         type="dvrk_console_json"
         args="-j $(arg config) -c crtk_alpha"/>
 
-  <rosparam file="$(find dvrk_psm1_moveit_config)/config/controllers.yaml" command="load"/>
-  
-  <include file="$(find dvrk_psm1_moveit_config)/launch/planning_context.launch">
-    <arg name="load_robot_description" value="true"/>
-  </include>
-  
-  <include file="$(find dvrk_psm1_moveit_config)/launch/move_group.launch">
-    <arg name="allow_trajectory_execution" value="true"/>
-    <arg name="fake_execution" value="false"/>
-    <arg name="info" value="true"/>
-  </include>
-
   <group ns="/dvrk/$(arg arm)">
 
     <arg name="gui" default="false"/>
@@ -37,6 +25,8 @@
        /dvrk/$(arg arm)/gripper/measured_js,
        /dvrk/$(arg arm)/jaw/measured_js]
     </rosparam>
+
+    <rosparam file="$(find dvrk_psm1_moveit_config)/config/controllers.yaml" command="load"/>
 
     <node name="joint_state_publisher"
 	  pkg="joint_state_publisher"
@@ -59,6 +49,17 @@
 	  pkg="ros_control_crtk_ros_hw"
 	  type="crtk_ros_hw_controller"
 	  output="screen"/>
+
+    <include file="$(find dvrk_psm1_moveit_config)/launch/planning_context.launch">
+      <arg name="load_robot_description" value="true"/>
+    </include>
+
+    <include file="$(find dvrk_psm1_moveit_config)/launch/move_group.launch">
+      <arg name="allow_trajectory_execution" value="true"/>
+      <arg name="fake_execution" value="false"/>
+      <arg name="info" value="true"/>
+    </include>
+
   </group>
 
   <node name="rviz"
