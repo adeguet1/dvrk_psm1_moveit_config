@@ -11,12 +11,12 @@
         type="dvrk_console_json"
         args="-j $(arg config) -c crtk_alpha"/>
 
-  <group ns="/dvrk/$(arg arm)">
+  <group ns="dvrk/$(arg arm)">
 
     <arg name="gui" default="false"/>
     <arg name="rate" default="20"/>
 
-    <param name="robot_description" command="rosrun xacro xacro.py $(arg model) prefix:=$(arg arm)_"/>
+    <param name="robot_description" command="rosrun xacro xacro $(arg model) prefix:=$(arg arm)_"/>
     <param name="use_gui" value="$(arg gui)"/>
     <param name="rate" value="$(arg rate)"/>
 
@@ -33,6 +33,11 @@
 	  type="joint_state_publisher"
 	  output="screen"/>
 
+    <node name="dvrk_crtk_hw"
+	  pkg="ros_control_crtk_ros_hw"
+	  type="crtk_ros_hw_controller"
+	  output="screen"/>
+
     <node name="ros_control_controller_spawner"
 	  pkg="controller_manager"
 	  type="spawner"
@@ -43,11 +48,6 @@
     <node name="robot_state_publisher"
 	  pkg="robot_state_publisher"
 	  type="robot_state_publisher"
-	  output="screen"/>
-
-    <node name="dvrk_crtk_hw"
-	  pkg="ros_control_crtk_ros_hw"
-	  type="crtk_ros_hw_controller"
 	  output="screen"/>
 
     <include file="$(find dvrk_psm1_moveit_config)/launch/planning_context.launch">
