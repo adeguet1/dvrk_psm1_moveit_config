@@ -10,9 +10,9 @@
         pkg="dvrk_robot"
         type="dvrk_console_json"
         args="-j $(arg config) -c crtk_alpha"/>
-
+<!--
   <group ns="dvrk/$(arg arm)">
-
+-->
     <arg name="gui" default="false"/>
     <arg name="rate" default="20"/>
 
@@ -26,7 +26,7 @@
        /dvrk/$(arg arm)/jaw/measured_js]
     </rosparam>
 
-    <rosparam file="$(find dvrk_psm1_moveit_config)/config/controllers.yaml" command="load"/>
+    <rosparam file="$(find dvrk_psm1_moveit_config)/config/ros_controller_config.yaml" command="load"/>
 
     <node name="joint_state_publisher"
 	  pkg="joint_state_publisher"
@@ -60,8 +60,9 @@
       <arg name="info" value="true"/>
     </include>
 
+<!--
   </group>
-
+-->
   <node name="rviz"
 	pkg="rviz" type="rviz"
 	args="-d $(find dvrk_model)/rviz_config/$(arg arm).rviz"/>
